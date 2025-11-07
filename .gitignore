@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Environment
+.env
+*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+*.log
+
+# Kubernetes
+kubeconfig
+
+# Test outputs
+submission_test.csv
+k8s_load_test_results.json
+*.csv
+
+# Secrets
+kaggle.json
+*.pem
+*.key
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local storage (submissions persist here)
+storage/
+!storage/.gitkeep
+!storage/README.md
+

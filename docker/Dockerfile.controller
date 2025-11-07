@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY requirements-controller.txt .
+RUN pip install --no-cache-dir -r requirements-controller.txt
+
+# Copy application
+COPY kaggle-job-orchestrator/ ./controller/
+COPY kaggle-api-gateway/models/ ./api/models/
+COPY kaggle-api-gateway/services/ ./api/services/
+COPY kaggle-api-gateway/__init__.py ./api/
+
+# Create non-root user
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+USER appuser
+
+CMD ["python", "-m", "controller.main"]
+

@@ -1,0 +1,44 @@
+# Persistent Local Storage for Kind (Dev Environment)
+# Data persists on Mac at: /tmp/kaggle-submissions
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: local-kaggle-submissions
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/kaggle-data  # Mounted from /tmp/kaggle-submissions on Mac
+    type: DirectoryOrCreate
+  persistentVolumeReclaimPolicy: Retain  # Keep data when PVC is deleted
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: workload
+          operator: In
+          values:
+          - kaggle-jobs
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: submissions-storage
+  namespace: kaggle-agent
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  volumeName: local-kaggle-submissions  # Bind to specific PV
+

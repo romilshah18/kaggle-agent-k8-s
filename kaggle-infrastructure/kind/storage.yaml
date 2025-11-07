@@ -1,0 +1,21 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: kaggle-storage
+provisioner: rancher.io/local-path
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Delete
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: submissions-storage
+  namespace: kaggle-agent
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: kaggle-storage
+  resources:
+    requests:
+      storage: 10Gi
+
